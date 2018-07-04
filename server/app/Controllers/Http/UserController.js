@@ -5,6 +5,7 @@ const User = use('App/Models/User')
 class UserController {
   async register ({request}) {
     const { email, password } = request.all()
+    console.log(request.all())
     await User.create({
       email,
       password,
