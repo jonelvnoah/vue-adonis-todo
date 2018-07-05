@@ -2,7 +2,7 @@
  <v-toolbar color="green" dark fixed>
     <v-toolbar-title class="mr-4">Vue ToDo</v-toolbar-title>
     <v-toolbar-items>
-      <v-btn flat>
+      <v-btn flat v-if="isLoggedIn">
         <v-icon class="mr-2">playlist_add_check</v-icon>
         Project
       </v-btn>
@@ -17,7 +17,7 @@
         <v-icon class="mr-2">fingerprint</v-icon>
         login
       </v-btn>
-      <v-btn flat v-if="isLoggedIn">
+      <v-btn flat v-if="isLoggedIn" @click="logout">
         <v-icon class="mr-2">exit_to_app</v-icon>
         logout
       </v-btn>
@@ -26,13 +26,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters('authentication', [
       'isLoggedIn',
     ]),
   },
+  methods: {
+    ...mapActions('authentication', [
+      'logout',
+    ])
+  }
 }
 </script>
 
