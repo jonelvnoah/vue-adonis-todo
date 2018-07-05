@@ -8,10 +8,15 @@ export default {
     registerPassword: null,
     registerError: null,
     token: null,
+    loginEmail: null,
+    loginPassword: null,
+    loginError: null,
   },
   actions: {
     logout({ commit }) {
       commit('setToken', null);
+      commit('setLoginEmail', null);
+      commit('setLoginPassword', null);
       router.push('/login');
     },
     register({ commit, state }) {
@@ -21,9 +26,21 @@ export default {
         password: state.registerPassword,
       }).then(({ data }) => {
         commit('setToken', data.token);
-        router.push('/');
+        router.push('/login');
       }).catch(() => {
         commit('setRegisterError', 'An error occured when you register your account.')
+      });
+    },
+    login({ commit, state }) {
+      commit('setLoginError', null);
+      return HTTP().post('/auth/login', {
+        email: state.loginEmail,
+        password: state.loginPassword,
+      }).then(({ data }) => {
+        commit('setToken', data.token);
+        router.push('/');
+      }).catch(() => {
+        commit('setLoginError', 'An error occured when you login your account.')
       });
     },
   },
@@ -44,6 +61,15 @@ export default {
     },
     setToken(state, token) {
       state.token = token;
+    },
+    setLoginEmail(state, email) {
+      state.loginEmail = email;
+    },
+    setLoginPassword(state, password) {
+      state.loginPassword = password;
+    },
+    setLoginError(state, error) {
+      state.loginError = error;
     },
   },
 };
