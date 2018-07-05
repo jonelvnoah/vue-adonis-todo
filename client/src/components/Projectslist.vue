@@ -1,16 +1,45 @@
 <template>
   <Panel title="Projects">
     <div
+      class="project mb-2"
       v-for="project in projects"
       :key="project.id">
-      {{ project.title }}
+      <v-layout row wrap>
+        <v-flex xs9 class="text-xs-left">
+          <span v-if="!project.isEditMode">
+            {{ project.title }}
+          </span>
+          <v-text-field
+            autofocus
+            @keyup.enter="saveProject(project)"
+            v-if="project.isEditMode"
+            :value="project.title"
+            @input="setProjectTitle({
+              project,
+              title: $event
+            })"></v-text-field>
+        </v-flex>
+        <v-flex xs3>
+          <v-icon
+            v-if="!project.isEditMode"
+            @click="setEditMode(project)">edit</v-icon>
+          
+           <v-icon
+            v-if="project.isEditMode"
+            @click="saveProject(project)">check</v-icon>
+           <v-icon
+            v-if="project.isEditMode"
+            @click="deleteProject(project)">delete</v-icon>
+        </v-flex>
+      </v-layout>
     </div>
-    <v-layout>
+    <v-layout row wrap class="mt-4">
       <v-flex xs8>
         <v-text-field
           placeholder="My project Name"
           :value="newProjectName"
-          @input="setProjectName"></v-text-field>   
+          @input="setProjectName"
+          @keyup.enter="createProject"></v-text-field>   
       </v-flex>
 
       <v-flex xs4>
@@ -36,13 +65,37 @@ export default {
       'projects',
     ])
   },
+  mounted () {
+    this.getProjects();
+  },
   methods: {
     ...mapMutations('projects', [
       'setProjectName',
+      'setEditMode',
+      'unsetEditMode',
+      'setProjectTitle',
     ]),
     ...mapActions('projects', [
-      'createProject',
+      'createProject', 
+      'getProjects',
+      'saveProject',
+      'deleteProject',
     ])
   }
 }
 </script>
+
+<style scoped>
+  .project {
+    font-size:20px;
+  }
+
+  .icon {
+    cursor: pointer;
+  }
+
+  .icon:hover {
+    color:#333;
+  }
+</style>
+
