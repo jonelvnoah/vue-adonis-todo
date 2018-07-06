@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
     <v-flex xs9 class="text-xs-left">
-      <span v-if="!isEditMode">
+      <span v-if="!isEditMode" @click="$emit('onClick')">
         {{ title }}
       </span>
       <v-text-field
@@ -31,8 +31,7 @@ export default {
   props: [
     'isEditMode',
     'title',
-    'record'
+    'record',
   ]
 }
 </script>
-

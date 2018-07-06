@@ -12,11 +12,12 @@
           project,
           title: $event
         })"
+        @onClick = "projectClicked(project)"
         @onEdit = "setEditMode(project)"
         @onSave = "saveProject(project)"
         @onDelete = "deleteProject(project)"></editable-record>
     </div>
-    <create-record 
+    <create-record
       placeholder = "My project name is ..."
       :value = "newProjectName"
       @onInput = "setProjectName"
@@ -26,8 +27,9 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
-import CreateRecord from '@/components/createRecord';
-import EditableRecord from '@/components/EditableRecord';
+import CreateRecord from '@/components/createRecord.vue';
+import EditableRecord from '@/components/EditableRecord.vue';
+
 export default {
   components: {
     CreateRecord,
@@ -37,26 +39,37 @@ export default {
     ...mapState('projects', [
       'newProjectName',
       'projects',
-    ])
+    ]),
+    ...mapState('tasks', [
+      'tasks',
+    ]),
   },
-  mounted () {
+  mounted() {
     this.getProjects();
   },
   methods: {
+    projectClicked(project) {
+      this.setCurrentProject(project);
+      this.fetchTasksForProject(project);
+    },
     ...mapMutations('projects', [
       'setProjectName',
       'setEditMode',
       'unsetEditMode',
       'setProjectTitle',
+      'setCurrentProject',
     ]),
     ...mapActions('projects', [
-      'createProject', 
+      'createProject',
       'getProjects',
       'saveProject',
       'deleteProject',
-    ])
-  }
-}
+    ]),
+    ...mapActions('tasks', [
+      'fetchTasksForProject',
+    ]),
+  },
+};
 </script>
 
 <style scoped>

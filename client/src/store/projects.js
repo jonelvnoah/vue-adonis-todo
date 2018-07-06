@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import HTTP from '../http';
-import router from '../router';
+// import router from '../router';
 
 export default {
   namespaced: true,
   state: {
     projects: [],
     newProjectName: null,
+    currentProject: null,
   },
   actions: {
     createProject({ commit, state }) {
@@ -40,6 +41,9 @@ export default {
   mutations: {
     setProjectName(state, name) {
       state.newProjectName = name;
+    },
+    setCurrentProject(state, project) {
+      state.currentProject = project;
     },
     appendProject(state, project) {
       state.projects.push(project);
