@@ -15,7 +15,12 @@
         })"
         @onEdit = "setEditMode(task)"
         @onSave = "saveTask(task)"
-        @onDelete = "deleteTask(task)"></editable-record>
+        @onDelete = "deleteTask(task)">
+        <v-icon
+          @click="checkClicked(task)">
+          {{ task.completed ? 'check_box' : 'check_box_outline_blank'}}
+        </v-icon>  
+      </editable-record>
     </div>
 
     <create-record
@@ -46,12 +51,17 @@ export default {
     ...mapMutations('tasks', [
       'setTaskName',
       'setEditMode',
+      'toggleCompleted',
     ]),
     ...mapActions('tasks', [
       'createTask',
       'saveTask',
       'deleteTask',
     ]),
+    checkClicked(task) {
+      this.toggleCompleted(task);
+      this.saveTask(task);
+    }
   }
 };
 </script>
